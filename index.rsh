@@ -18,24 +18,25 @@ export const main = Reach.App(() => {
   // The second one to publish always attaches
   const [condition, users] = parallelReduce([true,0])
     .invariant(balance() == 0)
-    .while(condition )
-    .define(() => {})
+    .while(condition)
+    // .define(() => {})
     .api(Users.whitelist, () => {
       check(!(whitelistedAddresses.member(this)), "Already a member");
-      check(users<1, "Limit Exceeded cannot register for whitelist")
+      check(users<5, "Limit Exceeded cannot register for whitelist")
     },
     ()=>0,
     (k)=>{
       k(true)
       whitelistedAddresses.insert(this);
+      
 
       return [condition,users +1]
     }
     )
-    .timeout(relativeTime(250), () => {
+    .timeout(relativeTime(2500), () => {
         const [[], k] = call(Users.contractOver);
         k(false);
-      return [condition, users];
+      return [false, users];
     });
     commit()
   // write your program here

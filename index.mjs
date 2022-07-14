@@ -4,14 +4,14 @@ const stdlib = loadStdlib(process.env);
 
 const startingBalance = stdlib.parseCurrency(100);
 
-const [Deployer, user, third] = await stdlib.newTestAccounts(2, startingBalance);
+const [Deployer, user, third, fourth] = await stdlib.newTestAccounts(6, startingBalance);
 const whitelist = async (who) => {
   try {
     console.log("Attaching to contract")
     const ctc = who.contract(backend, ctcDeployer.getInfo());
     const accc = await ctc.apis.Users.whitelist();
     console.log(
-      "\nBalance in wallet",
+      "\nBalance in wallet", accc,
       stdlib.formatCurrency(await stdlib.balanceOf(who)),
       "Algo\n"
     );
@@ -40,9 +40,10 @@ try {
   console.log(error)
 }
 
-await whitelist(user)
-await whitelist(user)
+await whitelist(fourth);
 await whitelist(third)
+await whitelist(user)
+await whitelist(user)
 
 
 
