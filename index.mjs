@@ -32,8 +32,8 @@ try {
   await Promise.all([
     backend.Deployer(ctcDeployer, {
       token: token.id,
-      inform: () => {
-        console.log("contract has been initialized and is working fine");
+      inform: (inform) => {
+      !!inform? console.log(inform) : console.log("contract has been initialized and is working fine");
         throw 42;
       },
       // implement Alice's interact object here

@@ -3,9 +3,9 @@
 export const main = Reach.App(() => {
   const D = Participant("Deployer", {
     // Specify Alice's interact interface here
-    inform: Fun([], Null),
+    inform: Fun([Bytes(128)], Null),
     token: Token,
-    noOfAddressesToWhitelist: UInt
+    noOfAddressesToWhitelist: UInt,
   });
   const Users = API("Users", {
     whitelist: Fun([], Bool),
@@ -16,7 +16,8 @@ export const main = Reach.App(() => {
   D.only(()=>{
     const token = declassify(interact.token)
   })
-  D.publish(token);
+  D.publish(token); 
+  D.interact.inform(Bytes(128).pad("Received token"));
   commit()
   const whitelisted = Array.replicate(5, D);
   D.pay([[1000, token]]);
@@ -31,7 +32,7 @@ export const main = Reach.App(() => {
     1000
   ])
     .invariant(balance(token) == tokenBalance)
-    .while(condition && users < 5)
+    .while(condition )
     .define(() => {
       // const size = whitelistedAddresses.Map.size();
     })
@@ -58,10 +59,10 @@ export const main = Reach.App(() => {
       k(false);
       return [condition, users, whitelist, tokenBalance];
     });
-     const share = balance(token) / 5;
-     whitelist.forEach((addr) => {
-       transfer(share, token).to(addr);
-     });
+    //  const share = balance(token) / 5;
+    //  whitelist.forEach((addr) => {
+    //    transfer(share, token).to(addr);
+    //  });
     transfer(balance(token),token).to(D)
     transfer(balance()).to(D)
     commit()
